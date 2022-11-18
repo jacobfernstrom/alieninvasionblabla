@@ -3,11 +3,7 @@ from pytimedinput import timedInput
 import os   
 import time
 
-#TODO
-# gränser för
-#
-#
-#
+
 def draw_board(): #this is borrowed from https://www.youtube.com/watch?v=lAIawk2IVIM
     for pos in board:
         
