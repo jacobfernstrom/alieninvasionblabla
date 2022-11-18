@@ -8,7 +8,7 @@ import time
 #
 #
 #
-def draw_board():
+def draw_board(): #this is borrowed from https://www.youtube.com/watch?v=lAIawk2IVIM
     for pos in board:
         
         if pos == attaxheli[0]:
@@ -82,24 +82,24 @@ def update_ufo():# update position of all UFO
             active_UFO[count] = (ufo[0], ufo[1] + 1)
             count+=1
 
-def points():
+def points(): #method to show if a shot and ufo is at the same position
     for shot in active_shots: 
         if shot in active_UFO: #check if current shot is in active_ufo and remove both shot and ufo if they are
             active_shots.remove(shot)
             active_UFO.remove(shot)
             point[0] += 1 #one point given to every ufo destroyed
 
-def ufo_shots():
-    temp_var1 = random.randint(0,2)
+def ufo_shots(): #create random ufo shots
+    temp_var1 = random.randint(0,2) # create ufo shot app. randomly, but app. every third 1/3
     if temp_var1 == 0:
         if len(active_UFO) > 0:
-            temp_var = random.randint(0,len(active_UFO)-1)
+            temp_var = random.randint(0,len(active_UFO)-1) #randomly select a ufo that shoot
         
             shot_pos = active_UFO[temp_var]
             shot_pos = (shot_pos[0],shot_pos[1]+1)  
             active_UFO_shots.append(shot_pos) 
 
-def update_ufo_shots():
+def update_ufo_shots(): #update the position of the ufo shots in the grid
     count = 0
     for shot in active_UFO_shots: 
         active_UFO_shots[count] = (shot[0], shot[1]+1) #changes height-position by -1, for every active shot
@@ -107,12 +107,12 @@ def update_ufo_shots():
             active_UFO_shots.pop(count) # remove shot when out of play
         count +=1 #count is to get position in list
 
-def start_info():
+def start_info(): #starter info on how to quit, and play
     print('w = forward')
     print('a = left')
     print('d = right')
     print('space = end game')
-    time.sleep(7)
+    time.sleep(7) #didnt want timedinput, just a delay
     print(3)
     time.sleep(0.5)
     print(2)
@@ -122,24 +122,20 @@ def start_info():
 
     
 
-height = 20
-width = 41
+height = 20 #grid height
+width = 41 # grid width
 
 
-active_shots = []
-active_UFO = []
-active_UFO_shots = []
-point = [0]
-attaxheli = [(width//2,height - 2)]
+active_shots = [] #empty lists 1
+active_UFO = [] # 2
+active_UFO_shots = [] # 3
+point = [0] # point list, i think i can skip the zero or just go with an int variable
+attaxheli = [(width//2,height - 2)] # starting position of attaxheli
 
-DIRECTION ={'left':(-1,0), 'right':(1,0),'up':(0,-1), 'nada':(0,0)}
-direction = DIRECTION['right']
+DIRECTION ={'left':(-1,0), 'right':(1,0),'up':(0,-1), 'nada':(0,0)} # borrowed, https://www.youtube.com/watch?v=lAIawk2IVIM, direction which every key represents, nada =no movement, up = shooting
+direction = DIRECTION['up'] 
 
 board = [(col,row) for row in range(height) for col in range(width)]
-count1 = 0
-
-playagain = 0
-
 
 
 
@@ -169,11 +165,10 @@ while True:
         ufo_shots()
         update_ufo_shots()
         points()
-        count1 += 1
-        if (width - 2, height -2) in active_UFO or (1, height - 2) in active_UFO:
+        if (width - 2, height -2) in active_UFO or (1, height - 2) in active_UFO: #check if ufos has reached earth, could probably make a function of this
             print('You lost, Aliens reached the surface of the earth')
             break
-        if attaxheli[0] in active_UFO_shots:
+        if attaxheli[0] in active_UFO_shots:#checks if attaxheli and ufo-shot is at same position, could probably make a function of this
             print('You lost, your attaxheli was destroyed')
             break
         
