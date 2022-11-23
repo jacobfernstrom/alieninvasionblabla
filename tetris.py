@@ -96,7 +96,7 @@ def check_bottom():
 
 
 
-#declarables
+#declarables 
 
 grid_height = 18
 grid_width = 12
