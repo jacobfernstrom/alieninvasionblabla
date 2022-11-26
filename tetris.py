@@ -5,7 +5,6 @@ from pytimedinput import timedInput
 
 
 
-
 #gameplay_function
 
 def draw_board ():
