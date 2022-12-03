@@ -2,6 +2,11 @@ from random import randint
 import os
 from pytimedinput import timedInput
 
+#TODO
+# up and down movements
+# down movement needs to count the steps to closest bottom block
+# check for points in botttom blocks and update
+# check for end game, blocks reach top row
 
 
 
@@ -30,7 +35,7 @@ def draw_board ():
             print('')
 
 def draw_tetroid (): # assign start position to tetroid
-    if len(new_block) == 0:   
+    if len(new_block) == 0 and direction != (1, 0):   
         temp_var = randint(0,6)
         if temp_var == 0: #start position of O-block
             for i in range(2):
@@ -66,40 +71,38 @@ def draw_tetroid (): # assign start position to tetroid
                 new_block.append((start_pos_block[0],start_pos_block[1] + i))
         
             new_block.append((start_pos_block[0] + 1,start_pos_block[1] + 2))
-
-
-     
     
-    print
-
 def update_tetroid ():
     count = 0
     count_two = 0
+    count_three = 0
     
     for part in new_block:
         if part[1] == grid_width - 2:
             count +=1
         elif part[1]== 1:
             count_two += 1
-    
+        elif (part[0]+1, part[1]) not in bottom_blocks:
+            count_three += 1
     
     for i in range(len(new_block)):
-        if count > 0 and direction == (0, -1):
-            new_block[i] = (new_block[i][0]+direction[0], new_block[i][1] + direction[1])
-        elif count_two > 0 and direction == (0, 1):
-            new_block[i] = (new_block[i][0]+direction[0], new_block[i][1] + direction[1])
-        elif count == 0 and count_two == 0:
-            new_block[i] = (new_block[i][0]+direction[0], new_block[i][1] + direction[1])
-        
-        
-   
-        
-
-    
+        if direction != (1,0):    
+            if count > 0 and direction == (0, -1):
+                new_block[i] = (new_block[i][0]+direction[0], new_block[i][1] + direction[1])
+            elif count_two > 0 and direction == (0, 1):
+                new_block[i] = (new_block[i][0]+direction[0], new_block[i][1] + direction[1])
             
+            elif count == 0 and count_two == 0:
+                new_block[i] = (new_block[i][0]+direction[0], new_block[i][1] + direction[1])
+        else:
+           
+            new_block[i] = (new_block[i][0]+5, new_block[i][1] + direction[1])
+
+        
 
     for i in range(len(new_block)): # pushe tetroid down one step
-        new_block[i] = (new_block[i][0]+1, new_block[i][1])
+        if direction != (1, 0):
+            new_block[i] = (new_block[i][0]+1, new_block[i][1])
 
 def check_bottom():
     global count_bottom
@@ -141,15 +144,16 @@ game_board = [(col,row) for col in range(grid_height) for row in range(grid_widt
 #MAIN_loop
 while True:
     draw_tetroid()
-    
     draw_board()
     txt,_ = timedInput(timeout = 0.5)
     match txt:
         case 'w': direction = DIRECTION['up']
         case 'a': direction = DIRECTION['left']
         case 'd': direction = DIRECTION['right']
+        case 's': direction = DIRECTION['down']
         case '': direction = DIRECTION['end_game']
         case ' ': break
+    
     update_tetroid()
     check_bottom()
     
